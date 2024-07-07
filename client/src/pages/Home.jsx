@@ -5,7 +5,7 @@ import SearchBar from "./SearchBar";
 import ProductList from "./ProductList";
 
 const Home = () => {
-    const [products, setProducts] = useState([]); // for array 
+    const [products, setProducts] = useState([]); 
     const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
 
@@ -14,8 +14,14 @@ const Home = () => {
        navigate('/login');
     }
 
-    const addProduct = (product) => {
-        setProducts((previousProducts) => [...previousProducts, product]);
+    const addProduct = (newProduct) => {
+        setProducts((previousProducts) => {
+            if (previousProducts.some(product => product.name === newProduct.name)) {
+                alert("Product already exists!");
+                return previousProducts;
+            }
+            return [...previousProducts, newProduct];
+        });
     };
 
     const searchProducts = products.filter((product) =>
@@ -23,22 +29,23 @@ const Home = () => {
     );
 
     return (
-        <>
-            <section>
-                <main>
-                    <div className="container">
-                        <div className="home">
-                            <h2>Home Page</h2>
-                            <button onClick={handleLogout}>LogOut</button>
-                            <AddProductForm addProduct={addProduct} />
-                            <SearchBar setSearchQuery={setSearchQuery} />
-                            <ProductList products={searchProducts} />
-                        </div>
+        
+        <section>
+            <main>
+                <div className="container">
+                    <div className="home">
+                        <h2>Home Page</h2>
+                        <button onClick={handleLogout}>LogOut</button>
+                        <AddProductForm addProduct={addProduct} />
+                        <SearchBar setSearchQuery={setSearchQuery} />
+                        <ProductList products={searchProducts} />
                     </div>
-                </main>
-            </section>
-        </>
+                </div>
+            </main>
+        </section>
+
     );
+
 };
 
 
